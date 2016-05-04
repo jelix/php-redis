@@ -5,7 +5,7 @@ class RedisException extends Exception {}
  * 
  * @author sash
  * @license LGPL
- * @version 1.2
+ * @version 1.2.1
  */
 class Redis {
 	private $port;
