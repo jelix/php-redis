@@ -17,7 +17,11 @@ class Redis {
 		$this->host = $host;
 		$this->port = $port;
 	}
-	
+
+	function __destruct() {
+		$this->disconnect();
+	}
+
 	private function connect() {
 		if ($this->_sock)
 			return;
