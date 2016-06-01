@@ -1,0 +1,30 @@
+{
+    "name": "jelix/php-redis",
+    "type": "library",
+    "description": "php5 class to manage data into a redis database. Fork from Sash php-redis lib.",
+    "keywords": ["redis"],
+    "license": "LGPL-2.1",
+    "authors": [
+        {
+            "name": "Alexander Alexiev",
+            "email": "alexiev@gmail.com"
+        },
+        {
+            "name": "Laurent Jouanneau",
+            "email": "laurent@jelix.org"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3"
+    },
+    "require-dev" : {
+        "phpunit/phpunit": "4.3.*"
+    },
+    "archive": {
+        "exclude": ["/tests"]
+    },
+    "autoload": {
+        "classmap": ["Redis.php"]
+    },
+    "minimum-stability": "stable"
+}
