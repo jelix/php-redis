@@ -841,5 +841,126 @@ class Redis {
 		array_unshift($params, strtoupper($name));
 		return $this->cmd($params);
 	}
-	
+
+
+	////////////////////////////////
+	///// PUBSUB
+	////////////////////////////////
+
+	/**
+	 * Subscribe to a channel or some channels
+	 *
+	 * The given callable is called for each received
+	 * messages send by a publisher.
+	 * The subscription stops when the callable returns a value.
+	 * 
+	 * @param mixed $channels a channel (string) or a list of channels (array)
+	 * @param callable $f  it accepts these arguments :
+	 * 						- redis object
+	 * 						- channel
+	 * 						- payload
+	 * 
+	 */
+	function subscribe($channels, callable $f) {
+		if (!is_array($channels)) {
+			$channels = array($channels);
+		}
+		array_unshift($channels, 'SUBSCRIBE');
+		$this->cmd($channels, false);
+
+		$exit = false;
+		while(!$exit) {
+			$response = $this->cmdResponse();
+			switch ($response[0]) {
+				case "subscribe":
+				case "unsubscribe":
+					break;
+				case "message":
+					if (is_string($f) || is_array($f)) {
+						$result = call_user_func($f, $this, $response[1], $response[2]);
+					}
+					else {
+						$result = $f($this, $response[1], $response[2]);
+					}
+					if ($result) {
+						$exit = $result;
+					}
+					break;
+				case "pong":
+					break;
+				default:
+					throw new RuntimeException("Unknown message type '".$response[0]);
+			}
+		}
+		$channels[0] = 'UNSUBSCRIBE';
+		$this->cmd($channels, false);
+		for($i=0; $i < count($channels) -1; $i++) {
+			$this->cmdResponse();
+		}
+		return $exit;
+	}
+
+	/**
+	 * publish a payload to a channel.
+	 * 
+	 * @param string $channel
+	 * @param string $payload
+	 */
+	function publish ($channel, $payload) {
+		return $this->cmd(array('publish', $channel, $payload));
+	}
+
+	/**
+	 * Subscribe to some channels that match the given pattern(s).
+	 *
+	 * The given callable is called for each received
+	 * messages send by a publisher.
+	 * The subscription stops when the callable returns a value.
+	 *
+	 * @param mixed $channelPatterns a pattern (string) or a list of pattern (array)
+	 * @param callable $f  it accepts these arguments :
+	 * 						- redis object
+	 * 						- channel pattern
+	 * 						- channel
+	 * 						- payload
+	 */
+	function psubscribe($channelPatterns, callback $f) {
+		if (!is_array($channelPatterns)) {
+			$channelPatterns = array($channelPatterns);
+		}
+		array_unshift($channelPatterns, 'PSUBSCRIBE');
+		$this->cmd($channelPatterns, false);
+
+		$exit = false;
+		while(!$exit) {
+			$response = $this->cmdResponse();
+			switch ($response[0]) {
+				case "psubscribe":
+				case "punsubscribe":
+					break;
+				case "pmessage":
+					if (is_string($f) || is_array($f)) {
+						$result = call_user_func($f, $this, $response[1], $response[2], $response[3]);
+					}
+					else {
+						$result = $f($this, $response[1], $response[2], $response[3]);
+					}
+					if ($result) {
+						$exit = $result;
+					}
+					break;
+				case "pong":
+					break;
+				default:
+					throw new RuntimeException("Unknown message type '".$response[0]);
+			}
+		}
+		$channelPatterns[0] = 'PUNSUBSCRIBE';
+		$this->cmd($channelPatterns, false);
+		for($i=0; $i < count($channelPatterns) -1; $i++) {
+			$this->cmdResponse();
+		}
+		return $exit;
+	}
+
 }

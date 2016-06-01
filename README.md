@@ -30,3 +30,5 @@ Changelog
 - 1.2: pipeline support. ->pipeline_begin() and then execute any number of commands - each will return null
         Then run ->pipeline_responses() to get all of the responses as array and end the pipeline mode
 - 1.2.1: fix quit() error, undefined variable on connection errors, and add closing during destruction of the object
+- next:
+    - support of Pub/Sub
