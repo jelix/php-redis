@@ -1,0 +1,11 @@
+<?php
+
+define('REDIS_TEST_HOST', '127.0.0.1');
+
+// by default, this is not the default port 6379
+// to avoid to launch tests on a database that is used
+// by other apps, since tests may destruct data
+// change to 6379 if you are sure that the server
+// is used only by tests 
+define('REDIS_TEST_PORT', '6379');
+
