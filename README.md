@@ -32,3 +32,5 @@ Changelog
 - 1.2.1: fix quit() error, undefined variable on connection errors, and add closing during destruction of the object
 - next:
     - support of Pub/Sub
+    - new method flushByPrefix(). Read warning in the method comment. 
+

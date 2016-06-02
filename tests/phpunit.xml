@@ -3,6 +3,7 @@
   <testsuites>
     <testsuite name="Redis tests">
       <file>mainTest.php</file>
+      <file>deleteKeysTest.php</file>
     </testsuite>
   </testsuites>
 </phpunit>

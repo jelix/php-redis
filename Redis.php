@@ -732,8 +732,60 @@ class Redis {
 	function flushall(){
 		return $this->cmd ( "FLUSHALL" );
 	}
-	
-	
+
+	/**
+	 * delete some keys starting by the given prefix
+	 *
+	 * *Warning*: use it with caution. This method could
+	 * consume huge processing time. It is not recommanded to use it
+	 * during a php request if there are chance that it will delete
+	 * thousand keys. In this case, prefer to launch it in a separate
+	 * process (for example in a worker launched by a messaging system like
+	 * RabbitMQ, Resque..)
+	 *
+	 * @param string $prefix
+	 * @param integer $maxKeyToDeleteByIter the number of keys that are deleted at each iteration
+	 *               To avoid memory issue it deleted keys by
+	 *               pack of $maxKeyToDeleteByIter key.
+	 *               You can change the default number,
+	 *               depending of the memory that the process can use.
+	 *               and the length of keys
+	 *               $maxKeyToDeleteByIter = maxmemory/(average key length+140)
+	 */
+	function flushByPrefix($prefix, $maxKeyToDeleteByIter = 3000) {
+		$end = false;
+		// to avoid memory issue, we will delete only $maxKeyToDeleteByIter
+		// at the same time
+		while(!$end) {
+			$nextIndex = -1;
+			// in this array, be sure it does not contain duplicate keys.
+			// According to SCAN specification, it may return some keys
+			// several time. We should not delete the same key
+			// several time.
+			$keysToDelete = array();
+
+			while ($nextIndex != 0) {
+				if ($nextIndex == -1) {
+					$nextIndex = 0;
+				}
+				$response = $this->cmd(array('SCAN', $nextIndex, 'MATCH', $prefix.'*'));
+				$nextIndex = intval($response[0]);
+				foreach($response[1] as $key) {
+					if (!isset($keysToDelete[$key])) {
+						$keysToDelete[$key] = true;
+					}
+				}
+				$end = ($nextIndex == 0);
+				if (count($keysToDelete)>= $maxKeyToDeleteByIter) {
+					$nextIndex = 0;
+				}
+			}
+			foreach($keysToDelete as $key => $v) {
+				$this->cmd(array('DEL', $key));
+			}
+		}
+	}
+
 	////////////////////////////////
 	///// Sorting
 	////////////////////////////////
