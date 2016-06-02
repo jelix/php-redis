@@ -151,7 +151,15 @@ class Redis {
 			@fclose ( $this->_sock );
 		$this->_sock = null;
 	}
-	
+
+	function __clone() {
+		// a clone should not use the same socket, as it may be closed
+		// by the other clone
+		$this->_sock = null;
+		$this->pipeline = false;
+		$this->pipeline_commands = 0;
+	}
+
 	////////////////////////////////
 	///// Connection handling
 	////////////////////////////////

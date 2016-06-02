@@ -34,3 +34,4 @@ Changelog
     - support of Pub/Sub
     - new method flushByPrefix(). Read warning in the method comment. 
     - new methods getHost() and getPort()
+    - fix cloning support: a clone should not reuse the same socket.
