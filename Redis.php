@@ -22,6 +22,14 @@ class Redis {
 		$this->disconnect();
 	}
 
+	public function getHost() {
+		return $this->host;
+	}
+
+	public function getPort() {
+		return $this->port;
+	}
+
 	private function connect() {
 		if ($this->_sock)
 			return;

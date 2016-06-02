@@ -33,4 +33,4 @@ Changelog
 - next:
     - support of Pub/Sub
     - new method flushByPrefix(). Read warning in the method comment. 
-
+    - new methods getHost() and getPort()
