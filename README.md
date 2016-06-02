@@ -5,9 +5,10 @@ php-redis contains php5 class for connecting with redis database with methods fo
 Quick start
 -----------
 * Install Redis from [redis.io](http://redis.io/download "Redis")
-* Download latest php-redis class from [here](https://github.com/sash/php-redis/archives/master)
+* Download latest php-redis class from [here](https://github.com/jelix/php-redis/archives/master)
 * Write some code:
 
+```php
 		# Connecting
 		$r = new Redis('localhost', 6379);
 		
@@ -19,7 +20,8 @@ Quick start
 		
 		# Call any redis method (including methods added in redis 2.*)
 		echo $r->zcard('zkey');
-		
+```
+
 Changelog
 ---------
 
@@ -30,7 +32,7 @@ Changelog
 - 1.2: pipeline support. ->pipeline_begin() and then execute any number of commands - each will return null
         Then run ->pipeline_responses() to get all of the responses as array and end the pipeline mode
 - 1.2.1: fix quit() error, undefined variable on connection errors, and add closing during destruction of the object
-- next:
+- 1.3.0:
     - support of Pub/Sub
     - new method flushByPrefix(). Read warning in the method comment. 
     - new methods getHost() and getPort()
