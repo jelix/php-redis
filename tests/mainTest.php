@@ -6,7 +6,7 @@ class mainTest extends PHPUnit_Framework_TestCase {
 
     function setUp() {
         if (!self::$redis) {
-            self::$redis = new Redis(REDIS_TEST_HOST, REDIS_TEST_PORT);
+            self::$redis = new \PhpRedis\Redis(REDIS_TEST_HOST, REDIS_TEST_PORT);
             self::$redis->flushall();
         }
     }

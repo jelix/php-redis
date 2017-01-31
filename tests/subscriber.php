@@ -1,8 +1,8 @@
 <?php
 
-require(__DIR__.'/../Redis.php');
+include (__DIR__.'/../vendor/autoload.php');
 
-$redis = new Redis();
+$redis = new \PhpRedis\Redis();
 
 $redis->subscribe('mychan', function($redis,$channel, $payload) {
     echo "Receive $channel : $payload \n";
