@@ -1,5 +1,6 @@
 <?php
-class RedisException extends Exception {}
+namespace PhpRedis;
+
 /**
  * Redis database connection class
  * 

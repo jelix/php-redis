@@ -1,6 +1,9 @@
-PHP5 Redis
+PHP Redis
 ==========
-php-redis contains php5 class for connecting with redis database with methods for all available commands in redis
+php-redis contains php classes for connecting with redis database with methods 
+for all available commands in redis.
+
+It provides pure PHP API, and doesn't rely on some PHP extensions.
 
 Quick start
 -----------
@@ -10,7 +13,7 @@ Quick start
 
 ```php
 		# Connecting
-		$r = new Redis('localhost', 6379);
+		$r = new \PhpRedis\Redis('localhost', 6379);
 		
 		# Save some value
 		$r->some_key = 'hello world';
@@ -37,3 +40,5 @@ Changelog
     - new method flushByPrefix(). Read warning in the method comment. 
     - new methods getHost() and getPort()
     - fix cloning support: a clone should not reuse the same socket.
+- 2.0.0: 
+    - move classes into a namespace to avoid conflicts with classes of the redis extension.
