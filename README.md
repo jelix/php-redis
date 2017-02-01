@@ -7,7 +7,7 @@ It provides pure PHP API, and doesn't rely on some PHP extensions.
 
 Quick start
 -----------
-* Install Redis from [redis.io](http://redis.io/download "Redis")
+* Install Redis Server from [redis.io](http://redis.io/download "Redis")
 * Download latest php-redis class from [here](https://github.com/jelix/php-redis/archives/master)
 * Write some code:
 
