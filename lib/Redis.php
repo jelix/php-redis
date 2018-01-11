@@ -40,8 +40,9 @@ class Redis {
 			return;
 		}
 		$msg = "Cannot open socket to {$this->host}:{$this->port}";
-		if ($errno || $errmsg)
+		if ($errno || $errstr) {
 			$msg .= "," . ($errno ? " error $errno" : "") . ($errstr ? " $errstr" : "");
+		}
 		throw new RedisException ( "$msg." );
 	}
 	private function debug($msg){
